@@ -206,6 +206,7 @@ function openTile(tile) {
   selected.push(tile);
   if (selected.length < 2) return;
   attempts++;
+  $('#memoryStats').textContent = pairs + ' / 6 cüt · ' + attempts + ' gediş';
   if (selected[0].dataset.symbol === selected[1].dataset.symbol) {
     selected.forEach(t => {
       t.classList.add('matched');
@@ -309,11 +310,20 @@ dialog.addEventListener('click', e => {
     }
   });
 
-  let spinning = false;
+  let spinning = false, resetTimer;
+  function resetReels(targets) {
+    reels.forEach((strip, i) => {
+      strip.style.transition = 'none';
+      if (targets) strip.children[0].textContent = targets[i];
+      strip.style.transform = 'translateY(0px)';
+    });
+    // Flush the reset before starting a new transition.
+    void slotMachine.offsetHeight;
+  }
 
   // Sound effects via Web Audio API
   function playTickSound(freq = 480) {
-    if (!audioContext) return;
+    if (!audioContext || !soundOn || document.hidden) return;
     try {
       const osc = audioContext.createOscillator();
       const gain = audioContext.createGain();
@@ -329,11 +339,12 @@ dialog.addEventListener('click', e => {
   }
 
   function playJackpotSound() {
-    if (!audioContext) return;
+    if (!audioContext || !soundOn || document.hidden) return;
     try {
       const notes = [523.25, 659.25, 783.99, 1046.5];
       notes.forEach((freq, idx) => {
         setTimeout(() => {
+          if (!soundOn || document.hidden) return;
           const osc = audioContext.createOscillator();
           const gain = audioContext.createGain();
           osc.type = 'sine';
@@ -352,6 +363,9 @@ dialog.addEventListener('click', e => {
   function spinSlot() {
     if (spinning) return;
     spinning = true;
+    clearTimeout(resetTimer);
+    resetReels();
+    slotLever.setAttribute('aria-disabled', 'true');
 
     // Pull lever animation
     slotLever.classList.add('pulled');
@@ -406,6 +420,7 @@ dialog.addEventListener('click', e => {
     setTimeout(() => {
       spinning = false;
       spinBtn.disabled = false;
+      slotLever.setAttribute('aria-disabled', 'false');
 
       // Check results
       if (targets[0] === targets[1] && targets[1] === targets[2]) {
@@ -427,20 +442,16 @@ dialog.addEventListener('click', e => {
       const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
       resultText.textContent = randomFortune;
 
-      // Reset strips smoothly after delay so they can spin again
-      setTimeout(() => {
-        reels.forEach((strip, i) => {
-          strip.style.transition = 'none';
-          strip.children[0].textContent = targets[i];
-          strip.style.transform = 'translateY(0px)';
-        });
-      }, 3000);
+      resetTimer = setTimeout(() => resetReels(targets), 3000);
 
     }, 2400);
   }
 
   spinBtn.addEventListener('click', spinSlot);
   slotLever.addEventListener('click', spinSlot);
+  slotLever.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); spinSlot(); }
+  });
 })();
 
 
@@ -484,12 +495,14 @@ $('#sound').addEventListener('click', async () => {
       if (!Audio) { toast('Bu brauzerdə səs dəstəyi yoxdur.'); return; }
       audioContext = new Audio();
     }
+    $('#sound').disabled = true;
     await audioContext.resume();
     soundOn = !soundOn;
     $('#sound').setAttribute('aria-pressed', String(soundOn));
     $('#sound').setAttribute('aria-label', soundOn ? 'Melodiyanı söndür' : 'Melodiyanı aç');
     if (soundOn) {
       playNote();
+      clearInterval(audioTimer);
       audioTimer = setInterval(playNote, 430);
       toast('Şirin melodiya açıldı 🎵');
     } else {
@@ -498,6 +511,8 @@ $('#sound').addEventListener('click', async () => {
     }
   } catch {
     toast('Səsi açmaq mümkün olmadı.');
+  } finally {
+    $('#sound').disabled = false;
   }
 });
 
@@ -522,8 +537,8 @@ $('#sound').addEventListener('click', async () => {
   const TOTAL_TIME = 30;
 
   let running = false, starScore = 0, lives = 3, timeLeft = TOTAL_TIME;
-  let playerX = 50, spawnInterval, tickInterval, fallers = [];
-  let starBest = Number(localStorage.getItem('sevda-star-best') || 0);
+  let playerX = 50, spawnInterval, tickInterval, fallers = [], endAt = 0;
+  let starBest = Number(storage.get('sevda-star-best')) || 0;
   if (starBest) bestEl.textContent = 'Ən yaxşı nəticən: ' + starBest + ' xal 🏆';
 
   function livesStr(n) {
@@ -540,7 +555,8 @@ $('#sound').addEventListener('click', async () => {
   }
 
   function setPlayerX(pct) {
-    playerX = Math.max(5, Math.min(95, pct));
+    const edge = Math.max(5, (player.offsetWidth / arena.clientWidth) * 50);
+    playerX = Math.max(edge, Math.min(100 - edge, pct));
     player.style.left = playerX + '%';
   }
 
@@ -550,6 +566,12 @@ $('#sound').addEventListener('click', async () => {
     const rect = arena.getBoundingClientRect();
     setPlayerX(((e.clientX - rect.left) / rect.width) * 100);
   });
+
+  arena.addEventListener('touchstart', e => {
+    if (!running) return;
+    const rect = arena.getBoundingClientRect();
+    setPlayerX(((e.touches[0].clientX - rect.left) / rect.width) * 100);
+  }, { passive: true });
 
   // Touch move
   arena.addEventListener('touchmove', e => {
@@ -561,7 +583,16 @@ $('#sound').addEventListener('click', async () => {
 
   // Keyboard navigation
   let keysDown = {};
-  document.addEventListener('keydown', e => { keysDown[e.key] = true; });
+  document.addEventListener('keydown', e => {
+    if (!running || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return;
+    e.preventDefault();
+    keysDown[e.key] = true;
+  });
+  window.addEventListener('blur', () => { keysDown = {}; });
+  document.addEventListener('visibilitychange', () => {
+    keysDown = {};
+    if (document.hidden && running) endGame();
+  });
   document.addEventListener('keyup',   e => { delete keysDown[e.key]; });
   function processKeys() {
     if (!running) return;
@@ -580,8 +611,11 @@ $('#sound').addEventListener('click', async () => {
     el.dataset.bad  = isBad ? '1' : '0';
     const leftPct = 5 + Math.random() * 90;
     el.style.left = leftPct + '%';
+    el.style.top = '-40px';
+    el.style.transform = 'translateX(-50%)';
     const dur = 1.8 + Math.random() * 1.5;
-    el.style.animation = 'starFall ' + dur + 's linear forwards';
+    // Gameplay motion uses elapsed time, independently of decorative animations.
+    el.style.animation = 'none';
     arena.appendChild(el);
     fallers.push({ el, leftPct, dur, t: Date.now() });
 
@@ -595,38 +629,37 @@ $('#sound').addEventListener('click', async () => {
     if (!running) return;
     processKeys();
     const arenaH = arena.clientHeight;
-    const arenaW = arena.clientWidth;
-    const playerW = (player.offsetWidth / arenaW) * 100;
-    const playerY = arenaH - 60;
-
-    fallers.forEach(f => {
-      if (!f.el.isConnected) return;
-      const elapsed = (Date.now() - f.t) / 1000;
-      const progress = elapsed / f.dur;
-      const itemY = progress * (arenaH + 40) - 40;
-
-      if (itemY < playerY - 20 || itemY > playerY + 40) return;
-
-      const itemCenterX = f.leftPct;
-      const playerCenterX = playerX;
-      if (Math.abs(itemCenterX - playerCenterX) < playerW + 5) {
+    const playerRect = player.getBoundingClientRect();
+    for (const f of [...fallers]) {
+      if (!running) break;
+      if (!f.el.isConnected) continue;
+      const progress = (Date.now() - f.t) / (f.dur * 1000);
+      f.el.style.top = (progress * (arenaH + 40) - 40) + 'px';
+      const r = f.el.getBoundingClientRect();
+      if (r.left < playerRect.right && r.right > playerRect.left &&
+          r.top < playerRect.bottom && r.bottom > playerRect.top) {
+        f.el.remove();
+        fallers = fallers.filter(x => x !== f);
         if (f.el.dataset.bad === '1') {
           lives = Math.max(0, lives - 1);
           arena.classList.add('star-hit');
           setTimeout(() => arena.classList.remove('star-hit'), 300);
-          if (lives === 0) endGame();
-        } else {
-          starScore++;
-        }
-        f.el.remove();
-        fallers = fallers.filter(x => x.el !== f.el);
+        } else starScore++;
         updateHUD();
+        if (lives === 0) endGame();
+      } else if (progress >= 1) {
+        f.el.remove();
+        fallers = fallers.filter(x => x !== f);
       }
-    });
+    }
   }
 
   function endGame() {
+    if (!running) return;
     running = false;
+    keysDown = {};
+    arena.classList.remove('playing');
+    updateHUD();
     clearInterval(spawnInterval);
     clearInterval(tickInterval);
     startBtn.disabled = false;
@@ -636,7 +669,7 @@ $('#sound').addEventListener('click', async () => {
       : '💔 Canın bitdi! Zəhərli ürəklərə toxunma demişdim axı :D (' + starScore + ' xal)';
     if (starScore > starBest) {
       starBest = starScore;
-      localStorage.setItem('sevda-star-best', starBest);
+      storage.set('sevda-star-best', starBest);
       bestEl.textContent = 'Ən yaxşı nəticən: ' + starBest + ' xal 🏆';
       if (typeof confetti === 'function') confetti();
     }
@@ -651,6 +684,9 @@ $('#sound').addEventListener('click', async () => {
     starScore = 0;
     lives = 3;
     timeLeft = TOTAL_TIME;
+    endAt = Date.now() + TOTAL_TIME * 1000;
+    keysDown = {};
+    arena.classList.add('playing');
     fallers = [];
     playerX = 50;
     player.style.left = '50%';
@@ -661,11 +697,25 @@ $('#sound').addEventListener('click', async () => {
 
     spawnInterval = setInterval(spawnFaller, 650);
     tickInterval = setInterval(() => {
+      timeLeft = Math.max(0, (endAt - Date.now()) / 1000);
+      if (timeLeft <= 0) { endGame(); return; }
       checkCollisions();
       if (!running) return;
-      timeLeft = Math.max(0, timeLeft - 0.1);
       timerEl.textContent = Math.ceil(timeLeft) + ' san';
       if (timeLeft <= 0) endGame();
     }, 100);
   });
 })();
+
+
+// The mascot advertises a click interaction and also supports keyboard activation.
+const mascot = $('#casinoMascot');
+if (mascot) {
+  const sayings = ['Sevda, bu gün şans səndən yanadır! ♡', 'Bir az oyun, bir az gülüş — əla plan! :D', 'Kitty sənə uğur arzulayır! 🎀'];
+  let mascotIndex = 0;
+  const greet = () => { $('#mascotSpeech').textContent = sayings[mascotIndex++ % sayings.length]; };
+  mascot.addEventListener('click', greet);
+  mascot.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); greet(); }
+  });
+}

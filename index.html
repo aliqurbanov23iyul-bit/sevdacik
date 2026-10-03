@@ -236,14 +236,14 @@
 
         <!-- Slot Control Panel -->
         <div class="slot-dashboard">
-          <div class="slot-status" id="slotStatus">Qolu çək və ya düyməyə bas! 👇</div>
+          <div class="slot-status" id="slotStatus" role="status">Qolu çək və ya düyməyə bas! 👇</div>
           <div class="slot-btn-row">
             <button class="button slot-btn" id="spinBtn">Şansımı Fırlat! 🎰</button>
           </div>
         </div>
 
         <!-- Mechanical Lever on the right -->
-        <div class="slot-lever" id="slotLever" role="button" aria-label="Kazino qolunu çək" title="Qolu çək!">
+        <div class="slot-lever" id="slotLever" role="button" tabindex="0" aria-label="Kazino qolunu çək" title="Qolu çək!">
           <div class="lever-knob"></div>
           <div class="lever-shaft"></div>
           <div class="lever-socket"></div>
@@ -254,7 +254,7 @@
       <!-- Result Card underneath -->
       <div class="fortune-result-card" id="slotResultBox">
         <div class="result-badge">GÜNÜN FALI 🔮</div>
-        <p id="slotResultText">Aparatı fırlat, görək bu gün nə çıxır...</p>
+        <p id="slotResultText" aria-live="polite">Aparatı fırlat, görək bu gün nə çıxır...</p>
       </div>
 
     </div>
@@ -329,3 +329,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+

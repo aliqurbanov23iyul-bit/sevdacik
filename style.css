@@ -2,7 +2,7 @@
    KITTY WORLD — Neo-Brutalist Kawaii Theme + Casino Slot Machine
    ═══════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900;1000&display=swap');
+/* Fonts are loaded once in index.html. */
 
 :root {
   --bg: #fff5f8;
@@ -1577,4 +1577,35 @@ dialog p { font-size: 15px; font-weight: 600; line-height: 1.7; color: #423038; 
     scroll-behavior: auto !important;
   }
   .js-ready .reveal { opacity: 1; transform: none; }
+}
+
+
+/* Keep controls and the long personalized heading within narrow screens. */
+.hero-copy, .scene, .card, .casino-layout > *, .slot-machine-wrapper { min-width: 0; }
+h1 em { max-width: 100%; overflow-wrap: anywhere; }
+.game-bottom { flex-wrap: wrap; }
+.slot-lever:focus-visible, .casino-mascot:focus-visible { outline: 3px solid var(--pink); outline-offset: 5px; }
+#starArena { cursor: auto; }
+#starArena.playing { touch-action: none; }
+@media (max-width: 480px) {
+  header { padding-inline: 12px; gap: 9px; }
+  .brand { font-size: 14px; gap: 6px; }
+  .brand img { width: 27px; }
+  .menu { margin-left: auto; }
+  .sound, .menu { flex-shrink: 0; width: 34px; height: 34px; }
+  h1 { font-size: clamp(36px, 9vw, 44px); letter-spacing: -1px; }
+  h1 em { -webkit-text-stroke: 1.4px var(--ink); text-shadow: 2px 3px 0 var(--ink); }
+  .card { padding: 20px; }
+  .card-top { gap: 8px; flex-wrap: wrap; }
+  .memory-grid { gap: 7px; }
+  .memory-tile { min-width: 0; padding: 4px; }
+  .casino-section { width: calc(100% - 28px); padding-inline: 18px; box-shadow: 5px 6px 0 var(--ink); }
+  .slot-machine-wrapper { padding-right: 20px; }
+  .slot-machine { padding: 16px 12px 20px; box-shadow: 5px 6px 0 var(--ink); }
+  .slot-stage { gap: 5px; padding: 10px 6px; }
+  .slot-reel-box { min-width: 0; }
+  .reel-item { font-size: 36px; }
+  .slot-banner { font-size: 13px; letter-spacing: .5px; }
+  .slot-btn { padding: 13px 18px; font-size: 14px; }
+  .interactive-hint-pill { white-space: normal; }
 }
