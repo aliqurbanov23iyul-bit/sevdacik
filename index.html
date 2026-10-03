@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fff5f8">
+<meta name="description" content="Sevda üçün hazırlanmış ən əyləncəli Hello Kitty dünyası: oyunlar, mizah, kazino aparatı və şirin sürprizlər!">
+<title>Kitty World — Sevdanın Dünyası ♡</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900;1000&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header>
+  <a class="brand" href="#home">
+    <img src="assets/bow.png" alt="Kitty bow">
+    <span>KITTY WORLD</span>
+  </a>
+  <button class="menu" aria-label="Menyunu aç" aria-expanded="false">☰</button>
+  <nav>
+    <a href="#home">Ana səhifə</a>
+    <a href="#oyunlar">Oyunlar 🐾</a>
+    <a href="#mektublar">Qeydlər 💌</a>
+    <a href="#kazino">Kazino 🎰</a>
+    <a href="#surpriz">Hədiyyə 🎁</a>
+  </nav>
+  <button id="sound" class="sound" aria-label="Melodiyanı aç" aria-pressed="false" title="Musiqi">🎵</button>
+</header>
+
+<main>
+
+<!-- HERO SECTION -->
+<section class="hero" id="home">
+  <div class="hero-copy">
+    <div class="eyebrow-wrapper">
+      <span class="eyebrow"><span class="badge-icon">🎀</span> Sevda üçün rəsmi anti-stress zonası</span>
+    </div>
+    <h1>Salam,<br><em>Sevdacıkk! ♡</em></h1>
+    <p class="hero-desc">Burada ciddi heç nə yoxdur. Dərs, iş, stress — bunların hamısı bu saytın qapısından keçə bilməz. Bir az çəhrayı, bir az kofe, bol-bol Hello Kitty — xoş gəldin! :D</p>
+    <div class="hero-action">
+      <a class="button" href="#oyunlar">Gəl başlayaq <span class="arrow">→</span></a>
+    </div>
+    <div class="handnote">Bu saytda qaşqabaq sallamaq qadağandır. Cəriməsi 1 fincan lattedir ☕</div>
+  </div>
+
+  <div class="scene">
+    <div class="scene-ring"></div>
+    <div class="star star-big">✦</div>
+    <div class="star star-pink">★</div>
+    <div class="star star-soft">✦</div>
+    <div class="circle-outline" aria-hidden="true"></div>
+    <div class="heart-outline" aria-hidden="true">♡</div>
+    <div class="heart-float" aria-hidden="true">♡</div>
+    
+    <div class="hero-kitty-container">
+      <button id="heroKitty" class="hero-kitty" aria-label="Kitty ilə danış" title="Tıkla, danışım! :D">
+        <div class="kitty-click-ripple" aria-hidden="true"></div>
+        <img src="assets/kitty-wave.png" alt="Əl yelləyən Hello Kitty">
+      </button>
+    </div>
+    
+    <div id="bubble" class="bubble">Məni tutmağa<br>çalışma, aşağıda<br>onsuz da qaçacam :D</div>
+    <span class="scene-caption">👆 Kitty-yə tıkla, sənə söz atsın!</span>
+    <div id="kittyReaction" class="kitty-reaction-floater" aria-hidden="true"></div>
+  </div>
+
+  <a class="scroll" href="#oyunlar">Aşağıda da çox şey var <span>↓</span></a>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div>SEVDA ♡ HELLO KITTY ✦ BU GÜN PƏHRİZ LƏĞV EDİLDİ :D ✦ KOFENİ İÇ ✦ GÜLÜMSƏ ✦ HƏYAT ÇOX QISADIR, ŞOKOLAD YE! ✦ SEVDA ♡ HELLO KITTY ✦</div>
+</div>
+
+<!-- GAMES SECTION -->
+<section class="section" id="oyunlar">
+  <div class="section-head reveal">
+    <span class="section-badge">Oyunlar</span>
+    <h2>Beynini bir az boşalt!</h2>
+    <p>Ciddi insan rolundan çıxmaq üçün ən ideal yer. Uduzsan da Kitty kimsəyə deməyəcək :P</p>
+  </div>
+
+  <div class="games">
+
+    <!-- Oyun 1: Tut Görək -->
+    <article class="card catch reveal">
+      <div class="card-top">
+        <span class="mini-label">01 — QAÇDI-TUTDU</span>
+        <span class="chip">20 saniyə</span>
+      </div>
+      <h3>Bu pişik yerində durmur ki!</h3>
+      <p>Ekranda ora-bura qaçır. Bacarırsansa tut — hər tutanda 1 xal! Tuta bilməsən Kitty sənə dil çıxaracaq :P</p>
+      
+      <div id="arena">
+        <div class="arena-cloud"></div>
+        <button id="runner" aria-label="Kitty-ni tut" title="Tutdum səni!"><img src="assets/kitty-running.png" alt="Qaçan Kitty"></button>
+        <span class="arena-hint">Başla düyməsinə bas, sonra Kitty-yə toxun!</span>
+      </div>
+      <div class="game-bottom">
+        <button id="startCatch" class="button small">Gəl bura, qaçma! 🐾</button>
+        <span id="catchStats" aria-live="polite">0 xal · 20 san.</span>
+      </div>
+      <p id="best" class="best"></p>
+    </article>
+
+    <!-- Oyun 2: Yaddaş Oyunu -->
+    <article class="card memory reveal">
+      <div class="card-top">
+        <span class="mini-label">02 — YADDAŞ OYUNU</span>
+        <span class="chip">6 cütlük</span>
+      </div>
+      <h3>Yaddaşın necədir?</h3>
+      <p>Eyni cütləri tap, görək neçə gedişə bitirəcəksən. Kartlara tıkla və çevir!</p>
+      
+      <div id="memoryGrid" class="memory-grid"></div>
+      <div class="game-bottom">
+        <button id="resetMemory" class="button small secondary">Yenidən qarışdır 🔀</button>
+        <span id="memoryStats" aria-live="polite">0 / 6 cüt</span>
+      </div>
+    </article>
+
+    <!-- Oyun 3: Ulduz Yağışı -->
+    <article class="card star-game reveal" style="grid-column:1/-1;">
+      <div class="card-top">
+        <span class="mini-label">03 — ULDUZ YAĞIŞI</span>
+        <span class="chip">30 saniyə</span>
+      </div>
+      <h3>Ulduzları yığ, qara ürəklərdən qaç!</h3>
+      <p>Göydən ulduzlar yağır — səbəti mouse ilə sürüşdür və yığ. Qara ürəklərə toxunsan can itirirsən :D</p>
+      
+      <div id="starArena">
+        <div id="starPlayer">🧺</div>
+        <div id="starHUD">
+          <span id="starScore">✦ 0</span>
+          <span id="starLives">💖💖💖</span>
+          <span id="starTimer">30 san</span>
+        </div>
+        <div id="starHint" class="arena-hint">Mouse və ya ← → oxlarla səbəti idarə et!</div>
+      </div>
+      <div class="game-bottom">
+        <button id="startStar" class="button small">Başla ✦</button>
+        <span id="starStats" aria-live="polite">0 xal · 3 can</span>
+      </div>
+      <p id="starBest" class="best"></p>
+    </article>
+
+  </div>
+</section>
+
+<!-- LETTERS SECTION -->
+<section class="letters-section" id="mektublar">
+  <div class="section section-inner">
+    <div class="section-head reveal">
+      <span class="section-badge">Qeydlər 💌</span>
+      <h2>Sənə 3 balaca qeyd</h2>
+      <p>Zərfin üstünə bas və içindəkini oxu — motivasiya, zarafat və bir az da həyat həqiqəti :D ♡</p>
+    </div>
+    <div class="letters">
+      <button class="envelope reveal" data-letter="0" title="Zərfi aç">
+        <span class="envelope-cta">👆 Bas, aç!</span>
+        <span class="envelope-flap"></span><span class="seal">♡</span>
+        <b>Gülməyin gəlmirsə oxu</b><small>GÜLÜMSƏTMƏ ZƏMANƏTLİ ♡</small>
+      </button>
+      <button class="envelope reveal" data-letter="1" title="Zərfi aç">
+        <span class="envelope-cta">👆 Bas, aç!</span>
+        <span class="envelope-flap"></span><span class="seal">✦</span>
+        <b>Hər şey üst-üstə gələndə</b><small>SƏNİN ÜÇÜN ANTİ-STRESS ✦</small>
+      </button>
+      <button class="envelope reveal" data-letter="2" title="Zərfi aç">
+        <span class="envelope-cta">👆 Bas, aç!</span>
+        <span class="envelope-flap"></span><span class="seal">🤫</span>
+        <b>Kitty-dən gizli etiraf</b><small>ÇOX MƏXFİDİR :P</small>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- SLOT MACHINE / KAZİNO APARATI SECTION -->
+<section class="section casino-section" id="kazino">
+  <div class="section-head reveal">
+    <span class="section-badge">Kazino 🎰</span>
+    <h2>Bu günün bəxtini fırlat!</h2>
+    <p>Pulsuz oynanılır :D Sağdakı qolu çək və ya düyməyə bas — görək bu gün nə çıxır!</p>
+  </div>
+
+  <div class="casino-layout">
+    
+    <!-- Left Mascot Kitty -->
+    <div class="casino-mascot reveal" id="casinoMascot" role="button" tabindex="0" title="Tıkla!">
+      <div class="image-halo"></div>
+      <img src="assets/kitty-gacha.png" alt="Kazino Kitty">
+      <div class="mascot-speech" id="mascotSpeech">Bütün mərclər məndən, sən ancaq qazanacaqsan :P</div>
+    </div>
+
+    <!-- Center Slot Machine -->
+    <div class="slot-machine-wrapper reveal">
+      <div class="slot-machine" id="slotMachine">
+        
+        <!-- Marquee / Lights -->
+        <div class="slot-marquee">
+          <div class="bulb-row">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="slot-banner">
+            <span class="jackpot-stars">★</span>
+            KITTY SLOTS 777
+            <span class="jackpot-stars">★</span>
+          </div>
+        </div>
+
+        <!-- Reel Window -->
+        <div class="slot-stage">
+          <div class="payline-guide">◄ UDUŞ XƏTTİ ►</div>
+          
+          <div class="slot-reel-box">
+            <div class="slot-reel" id="reel0">
+              <div class="reel-strip" id="strip0"></div>
+            </div>
+          </div>
+
+          <div class="slot-reel-box">
+            <div class="slot-reel" id="reel1">
+              <div class="reel-strip" id="strip1"></div>
+            </div>
+          </div>
+
+          <div class="slot-reel-box">
+            <div class="slot-reel" id="reel2">
+              <div class="reel-strip" id="strip2"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slot Control Panel -->
+        <div class="slot-dashboard">
+          <div class="slot-status" id="slotStatus">Qolu çək və ya düyməyə bas! 👇</div>
+          <div class="slot-btn-row">
+            <button class="button slot-btn" id="spinBtn">Şansımı Fırlat! 🎰</button>
+          </div>
+        </div>
+
+        <!-- Mechanical Lever on the right -->
+        <div class="slot-lever" id="slotLever" role="button" aria-label="Kazino qolunu çək" title="Qolu çək!">
+          <div class="lever-knob"></div>
+          <div class="lever-shaft"></div>
+          <div class="lever-socket"></div>
+        </div>
+
+      </div>
+
+      <!-- Result Card underneath -->
+      <div class="fortune-result-card" id="slotResultBox">
+        <div class="result-badge">GÜNÜN FALI 🔮</div>
+        <p id="slotResultText">Aparatı fırlat, görək bu gün nə çıxır...</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- GIFT SECTION -->
+<section id="surpriz" class="gift-section">
+  <div class="reveal">
+    <span class="section-badge">Hədiyyə 🎁</span>
+    <h2>Qutunun içində nə var görəsən?</h2>
+    <p>iPhone 16 Pro gözləmirdin yəqin? :D Amma içindəki şey daha qiymətlidir!</p>
+  </div>
+  
+  <button class="gift" id="gift" aria-label="Hədiyyəni aç" title="Tıkla, aç!">
+    <span class="gift-pulse-ring" aria-hidden="true"></span>
+    <span class="gift-lid"></span><span class="gift-box"></span>
+    <span class="gift-ribbon"></span><span class="gift-bow">🎀</span>
+  </button>
+  
+  <span class="gift-note">Qorxma, partlamır — tıkla! :D ♡</span>
+  
+  <div id="giftMessage" hidden>
+    <img src="assets/kitty-sitting.png" alt="Oturan Hello Kitty">
+    <h3>🎉 Sən Doğrudan da Xüsusisən!</h3>
+    <p>Bu saytı hazırlayarkən bilirdim ki, sən bura baxanda bir dəfə «dəli olublar :D» deyəcəksən — elə məqsəd də o idi! Həyatındakı hər gün bu sayt qədər əyləncəli, rəngli və pozitiv keçsin. Gülümsə, əhvalını heç kimin xırda hərəkətlərinə görə pozma — hər şey çox qəşəng olacaq! ♡</p>
+    <button class="button secondary" id="celebrate">Konfeti yağdır ✨</button>
+  </div>
+</section>
+
+<!-- SOCIAL SECTION -->
+<section class="social-section" id="elaqe">
+  <div class="social-spark spark-one" aria-hidden="true">✦</div>
+  <div class="social-spark spark-two" aria-hidden="true">♡</div>
+  <img class="social-kitty" src="assets/kitty-peek.png" alt="Kənardan baxan Hello Kitty">
+
+  <div class="social-content reveal">
+    <span class="section-badge">Əlaqə</span>
+    <h2>Kitty-ni bəyəndinsə,<br>yazmaq olar :D</h2>
+    <p class="social-sub">Əgər bir dəfə gülümsəyə bildinsə — missiya tamamlandı!</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/ok4nnerr/" target="_blank" rel="noopener noreferrer" aria-label="Instagram profilini aç">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".7" class="dot"/></svg>Instagram
+      </a>
+      <a href="https://www.tiktok.com/@ok4nnerr" target="_blank" rel="noopener noreferrer" aria-label="TikTok profilini aç">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h3c.3 2 1.5 3.4 4 3.8v3a9 9 0 0 1-4-1.3V16a7 7 0 1 1-6-6.9v3.2A3.8 3.8 0 1 0 14 16V3Z"/></svg>TikTok
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img src="assets/bow.png" alt="Kitty bow">
+  <a href="#home">Sevdanın balaca dünyası ♡</a>
+  <p>Bir az çəhrayı. Bir az Kitty. Bol-bol gülüşlər.</p>
+  <span>Bütün hüquqlar Kitty tərəfindən qorunur :P</span>
+</footer>
+</main>
+
+<!-- DIALOG FOR LETTERS -->
+<dialog id="letterDialog">
+  <button class="dialog-close" aria-label="Məktubu bağla">×</button>
+  <span class="section-badge">SEVDA ÜÇÜN ♡</span>
+  <h2 id="letterTitle"></h2>
+  <p id="letterText"></p>
+  <div class="letter-sign">Kitty-dən, bir az da məndən ♡</div>
+</dialog>
+
+<div id="toast" role="status"></div>
+<script src="script.js"></script>
+</body>
+</html>
